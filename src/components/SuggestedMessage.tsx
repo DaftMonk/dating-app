@@ -1,5 +1,7 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import REFRESH from "@svgs/refresh.svg";
+import { colors, fonts } from "@constants";
 
 type Props = {
   message: string;
@@ -8,8 +10,11 @@ type Props = {
 export function SuggestedMessage({ message }: Props) {
   return (
     <View style={styles.container}>
-      <Ionicons name="refresh" size={20} color="#8E8E8E" />
-      <Text style={styles.tapText}>Tap to shuffle</Text>
+      <View style={styles.row}>
+        <REFRESH height={20} width={20} />
+        <Text style={styles.tapText}>Tap to shuffle</Text>
+      </View>
+
       <View style={styles.messageContainer}>
         <Text style={styles.message}>{message}</Text>
         <TouchableOpacity style={styles.sendButton}>
@@ -23,40 +28,55 @@ export function SuggestedMessage({ message }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
-    alignItems: 'center',
+    alignItems: "flex-start",
+    paddingTop: 10,
+    paddingBottom: 4,
+    width: "72%",
+    alignSelf: "flex-end",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingBottom: 8,
   },
   tapText: {
-    color: '#8E8E8E',
-    fontSize: 12,
-    marginTop: 4,
+    color: colors.gray_darker,
+    fontSize: 14,
+    paddingLeft: 2,
+    fontFamily: fonts.Proxima_Nova_Bold,
   },
   messageContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F8F8F8',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#E0E0E0',
-    borderStyle: 'dashed',
-    padding: 12,
-    marginTop: 8,
-    marginBottom: 4,
+    flexDirection: "row",
+    alignItems: "flex-end",
+    width: "100%",
+    backgroundColor: "#F8F8F8",
+    borderRadius: 18,
+    borderWidth: 2.2,
+    borderColor: "#E0E0E0",
+    borderStyle: "dashed",
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+    alignSelf: "flex-end",
   },
   message: {
     flex: 1,
-    color: '#000',
+    color: colors.gray_darker,
     fontSize: 14,
+    fontFamily: fonts.Proxima_Nova_Semibold,
   },
   sendButton: {
-    marginLeft: 8,
+    paddingLeft: 8,
   },
   sendText: {
-    color: '#0095F6',
-    fontWeight: '600',
+    color: colors.blue_dark,
+    fontWeight: "800",
   },
   suggestedText: {
-    color: '#8E8E8E',
+    alignSelf: "flex-end",
+    color: colors.gray_dark,
     fontSize: 12,
+    fontFamily: fonts.Proxima_Nova_Bold,
+    paddingTop: 8,
   },
 });

@@ -1,20 +1,23 @@
-import { Text, StyleSheet } from 'react-native';
+import { fonts } from "@constants";
+import { Text, StyleSheet, StyleProp, ViewStyle, View } from "react-native";
 
 type Props = {
   title: string;
+  style?: StyleProp<ViewStyle>;
 };
 
-export function SectionHeader({ title }: Props) {
+export function SectionHeader({ title, style }: Props) {
   return (
-    <Text style={styles.title}>{title}</Text>
+    <View style={[style]}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    padding: 16,
-    color: '#000',
+    fontSize: 16,
+    fontFamily: fonts.Proxima_Nova_Bold,
+    color: "#000",
   },
 });

@@ -1,0 +1,12 @@
+export const Proxima_Nova_Alt_Thin = 'Proxima-Nova-Alt-Thin';
+export const Proxima_Nova_Black_Italic = 'Proxima-Nova-Black-Italic';
+export const Proxima_Nova_Black = 'Proxima-Nova-Black';
+export const Proxima_Nova_Regular = 'Proxima-Nova-Regular';
+export const Proxima_Nova_Bold_Italic = 'Proxima-Nova-Bold-Italic';
+export const Proxima_Nova_Bold = 'Proxima-Nova-Bold';
+export const Proxima_Nova_Extrabold_Italic = 'Proxima-Nova-Extrabold-Italic';
+export const Proxima_Nova_Extrabold = 'Proxima-Nova-Extrabold';
+export const Proxima_Nova_Semibold_Italic = 'Proxima-Nova-Semibold-Italic';
+export const Proxima_Nova_Semibold = 'Proxima-Nova-Semibold';
+export const Proxima_Nova_Thin_Italic = 'Proxima-Nova-Thin-Italic';
+export const Proxima_Nova_Thin = 'Proxima-Nova-Thin';

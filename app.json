@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "TinderClone",
+    "slug": "com.clone.tinder",
+    "version": "1.0.0",
+    "android": {
+      "package": "com.clone.tinder",
+      "newArchEnabled": true
+    },
+    "ios": {
+      "bundleIdentifier": "com.clone.tinder",
+      "newArchEnabled": true
+    },
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}

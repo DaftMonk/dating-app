@@ -1,48 +1,44 @@
-import { RouteProp } from '@react-navigation/core';
+import { RouteProp } from "@react-navigation/core";
 import * as React from "react";
 import { StyleSheet } from "react-nativescript";
 import { FrameNavigationProp } from "react-nativescript-navigation";
 
 import { MainStackParamList } from "../NavigationParamList";
+import { fonts } from "@constants";
 
 type ScreenTwoProps = {
-    route: RouteProp<MainStackParamList, "Two">,
-    navigation: FrameNavigationProp<MainStackParamList, "Two">,
+  route: RouteProp<MainStackParamList, "Two">;
+  navigation: FrameNavigationProp<MainStackParamList, "Two">;
 };
 
 export function ScreenTwo({ navigation, route }: ScreenTwoProps) {
-    return (
-        <flexboxLayout style={styles.container}>
-            <label style={styles.text}>
-                You're viewing screen two!
-            </label>
-            <label style={styles.text}>
-                Message: {route.params.message}
-            </label>
-            <button
-                style={styles.button}
-                onTap={() => navigation.goBack()}
-            >
-                Go back
-            </button>
-        </flexboxLayout>
-    );
+  return (
+    <flexboxLayout style={styles.container}>
+      <label style={styles.text}>You're viewing screen two!</label>
+      <label style={styles.text}>Message: {route.params.message}</label>
+      <button style={styles.button} onTap={() => navigation.goBack()}>
+        Go back
+      </button>
+    </flexboxLayout>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        height: "100%",
-        flexDirection: "column",
-        justifyContent: "center",
-        backgroundColor: "yellow",
-    },
-    text: {
-        textAlignment: "center",
-        fontSize: 24,
-        color: "black",
-    },
-    button: {
-        fontSize: 24,
-        color: "#2e6ddf",
-    },
+  container: {
+    height: "100%",
+    flexDirection: "column",
+    justifyContent: "center",
+    backgroundColor: "yellow",
+  },
+  text: {
+    textAlignment: "center",
+    fontSize: 24,
+    color: "black",
+    fontFamily: fonts.Proxima_Nova_Regular,
+  },
+  button: {
+    fontSize: 24,
+    color: "#2e6ddf",
+    fontFamily: fonts.Proxima_Nova_Regular,
+  },
 });

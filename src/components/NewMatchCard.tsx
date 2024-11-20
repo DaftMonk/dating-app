@@ -1,21 +1,31 @@
-import { TouchableOpacity, Image, Text, StyleSheet } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import { colors, fonts } from "@constants";
+import CAMERA_BLUE from "@svgs/camera_blue.svg";
+import { LinearGradient } from "expo-linear-gradient";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   photo: string;
   name: string;
+  marker?: boolean;
+  hasCamera?: boolean;
 };
 
-export function NewMatchCard({ photo, name }: Props) {
+export function NewMatchCard({ photo, name, marker, hasCamera }: Props) {
   return (
     <TouchableOpacity style={styles.container}>
+      {marker && <View style={styles.marker} />}
       <LinearGradient
-        colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.7)']}
+        colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}
         style={styles.gradient}
       >
         <Image source={{ uri: photo }} style={styles.photo} />
-        <Text style={styles.name}>{name}</Text>
       </LinearGradient>
+      <View style={styles.row}>
+        <Text style={styles.name}>{name}</Text>
+        {hasCamera && (
+          <CAMERA_BLUE height={25} width={25} style={styles.camera} />
+        )}
+      </View>
     </TouchableOpacity>
   );
 }
@@ -23,24 +33,46 @@ export function NewMatchCard({ photo, name }: Props) {
 const styles = StyleSheet.create({
   container: {
     width: 100,
-    height: 130,
     marginHorizontal: 8,
     borderRadius: 10,
-    overflow: 'hidden',
   },
   gradient: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    padding: 8,
+    width: 100,
+    height: 125,
+    backgroundColor: "#F3F3F3",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   photo: {
-    ...StyleSheet.absoluteFillObject,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center",
+    paddingTop: 8,
   },
   name: {
-    color: '#fff',
+    color: "black",
     fontSize: 14,
-    fontWeight: 'bold',
+    fontFamily: fonts.Proxima_Nova_Bold,
+  },
+  camera: {
+    marginLeft: 5,
+  },
+  marker: {
+    position: "absolute",
+    zIndex: 9999,
+    backgroundColor: colors.primary,
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    borderWidth: 3,
+    borderColor: "white",
+    right: -10,
+    marginTop: "52%",
   },
 });

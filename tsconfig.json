@@ -1,10 +1,20 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "jsx":"react-native",
     "strict": true,
-    "baseUrl": ".",
+   "baseUrl": "./src",
     "paths": {
-      "@/*": ["src/*"]
+      "@svgs/*": ["assets/svgs/*"],
+      "@fonts/*": ["assets/fonts/*"],
+      "@images/*": ["assets/images/*"],
+      "@screens": ["screens"],
+      "@app-types": ["types"],
+      "@app-types/*": ["types/*"],
+      "@app-data": ["data"],
+      "@app-data/*": ["data/*"],
+      "@constants": ["constants"],
+      "@constants/*": ["constants/*"],
     }
   }
 }
