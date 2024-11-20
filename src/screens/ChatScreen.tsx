@@ -68,7 +68,7 @@ const INITIAL_MESSAGES = [
   },
   {
     id: "6",
-    message: "Perfect. Shoot me your phone number btw",
+    message: "Perfect. Shoot me your phone number btw, ",
     isSender: true,
     showSent: true,
     isFlat: false,
@@ -98,29 +98,28 @@ export function ChatScreen({ route, navigation }: Props) {
       keyboardVerticalOffset={90}
     >
 
-<View style={styles.header}>
-  <TouchableOpacity
-    style={styles.left}
-    onPress={() => navigation.goBack()}
-  >
-    <BACK_ICON height={30} width={30} />
-  </TouchableOpacity>
+    <View style={styles.header}>
+      <TouchableOpacity
+        style={styles.left}
+        onPress={() => navigation.goBack()}
+      >
+        <BACK_ICON height={30} width={30} />
+      </TouchableOpacity>
 
-  <View style={styles.center}>
-    <Image source={{ uri: route.params.photo }} style={styles.avatar} />
-    <Text style={styles.name}>{route.params.name}</Text>
-  </View>
+      <View style={styles.center}>
+        <Image source={{ uri: route.params.photo }} style={styles.avatar} />
+        <Text style={styles.name}>{route.params.name}</Text>
+      </View>
 
-  <View style={styles.row}>
-    <TouchableOpacity style={styles.videoButton}>
-      <VIDEO_ICON height={30} width={30} />
-    </TouchableOpacity>
-    <TouchableOpacity>
-      <MENU_BOTTOM height={30} width={30} />
-    </TouchableOpacity>
-  </View>
-</View>
-
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.videoButton}>
+          <VIDEO_ICON height={30} width={30} />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <MENU_BOTTOM height={30} width={30} />
+        </TouchableOpacity>
+      </View>
+    </View>
 
 
       <FlatList
