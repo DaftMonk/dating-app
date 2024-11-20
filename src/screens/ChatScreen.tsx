@@ -97,31 +97,28 @@ export function ChatScreen({ route, navigation }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={90}
     >
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.left}
+          onPress={() => navigation.goBack()}
+        >
+          <BACK_ICON height={30} width={30} />
+        </TouchableOpacity>
 
-<View style={styles.header}>
-  <TouchableOpacity
-    style={styles.left}
-    onPress={() => navigation.goBack()}
-  >
-    <BACK_ICON height={30} width={30} />
-  </TouchableOpacity>
+        <View style={styles.col}>
+          <Image source={{ uri: route.params.photo }} style={styles.avatar} />
+          <Text style={styles.name}>{route.params.name}</Text>
+        </View>
 
-  <View style={styles.center}>
-    <Image source={{ uri: route.params.photo }} style={styles.avatar} />
-    <Text style={styles.name}>{route.params.name}</Text>
-  </View>
-
-  <View style={styles.row}>
-    <TouchableOpacity style={styles.videoButton}>
-      <VIDEO_ICON height={30} width={30} />
-    </TouchableOpacity>
-    <TouchableOpacity>
-      <MENU_BOTTOM height={30} width={30} />
-    </TouchableOpacity>
-  </View>
-</View>
-
-
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.videoButton}>
+            <VIDEO_ICON height={30} width={30} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <MENU_BOTTOM height={30} width={30} />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <FlatList
         data={messages}
@@ -162,7 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 12,
-    paddingVertical: 28,
+    paddingVertical: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: "#E0E0E0",
     backgroundColor: "#ffffff",
@@ -175,23 +172,17 @@ const styles = StyleSheet.create({
     // Add elevation for Android
     elevation: 3,
   },
-  center: {
-    position: "absolute", // Place the center content absolutely
-    left: 0,
-    right: 0,
-    flexDirection: "column",
-    alignItems: "center",
-  },
   left: {
     paddingHorizontal: 5,
   },
   col: {
     flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
   row: {
     flexDirection: "row",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 2,
   },
@@ -201,14 +192,13 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   name: {
-    fontSize: 14, // Slightly larger font for better readability
+    fontSize: 12,
     color: colors.gray_ligtht,
     fontFamily: fonts.Proxima_Nova_Semibold,
-    paddingTop: 4,
+    paddingTop: 2,
   },
   videoButton: {
     marginRight: 16,
-    tintColor: "red", // Add red tint to the video icon
   },
   messagesList: {
     paddingVertical: 16,
