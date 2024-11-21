@@ -169,14 +169,14 @@ const styles = StyleSheet.create({
   },
   yourTurn: {
     backgroundColor: "#000",
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 16,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    borderRadius: 12,
     marginLeft: 8,
   },
   yourTurnText: {
     color: "white",
-    fontSize: 12,
+    fontSize: 11,
     fontFamily: fonts.Proxima_Nova_Bold,
   },
   innerContainer: {

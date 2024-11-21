@@ -154,6 +154,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 20,
     paddingVertical: 7,
+    maxWidth: "100%",
   },
   senderBubble: {
     backgroundColor: colors.blue_sender,
@@ -165,10 +166,11 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
+    letterSpacing: 0.6,
     fontFamily: fonts.Proxima_Nova_Regular,
   },
   senderText: {
-    color: "#fff",
+    color: "white",
   },
   receiverText: {
     color: "#000",
