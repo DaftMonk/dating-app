@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   senderContainer: {
     flexDirection: "row-reverse",
-    alignSelf: "flex-end"
+    alignSelf: "flex-end",
   },
   receiverContainer: {
     alignSelf: "flex-start",
