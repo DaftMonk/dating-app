@@ -4,6 +4,7 @@ import {
   TextInput,
   TouchableOpacity,
   Text,
+  Image,
   StyleSheet,
   Platform,
 } from "react-native";
@@ -55,8 +56,13 @@ export function MessageInput({ onSend }: Props) {
           <MUSIC height={40} width={40} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.6} style={styles.bottom_button}>
-          <LOAD height={40} width={40} />
+          <Image
+            source={require("@images/load_jpg.png")}
+            style={styles.icon}
+            
+          />
         </TouchableOpacity>
+
       </View>
     </View>
   );
@@ -82,6 +88,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderWidth: 0.2,
     borderColor: colors.border_light,
+  },
+  icon: {
+    height: 40,
+    width: 40,
   },
   input: {
     flex: 1,
