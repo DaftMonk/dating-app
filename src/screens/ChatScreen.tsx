@@ -68,7 +68,7 @@ const INITIAL_MESSAGES = [
   },
   {
     id: "6",
-    message: "Perfect. Shoot me your phone number btw",
+    message: "Perfect. Shoot me your phone number btw, ",
     isSender: true,
     showSent: true,
     isFlat: false,
@@ -97,28 +97,31 @@ export function ChatScreen({ route, navigation }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={90}
     >
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.left}
-          onPress={() => navigation.goBack()}
-        >
-          <BACK_ICON height={30} width={30} />
-        </TouchableOpacity>
 
-        <View style={styles.col}>
-          <Image source={{ uri: route.params.photo }} style={styles.avatar} />
-          <Text style={styles.name}>{route.params.name}</Text>
-        </View>
 
-        <View style={styles.row}>
-          <TouchableOpacity style={styles.videoButton}>
-            <VIDEO_ICON height={30} width={30} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <MENU_BOTTOM height={30} width={30} />
-          </TouchableOpacity>
-        </View>
-      </View>
+<View style={styles.header}>
+  <TouchableOpacity
+    style={styles.left}
+    onPress={() => navigation.goBack()}
+  >
+    <BACK_ICON height={30} width={30} />
+  </TouchableOpacity>
+
+  <View style={styles.center}>
+    <Image source={{ uri: route.params.photo }} style={styles.avatar} />
+    <Text style={styles.name}>{route.params.name}</Text>
+  </View>
+
+  <View style={styles.row}>
+    <TouchableOpacity style={styles.videoButton}>
+      <VIDEO_ICON height={30} width={30} fill="red" /> 
+    </TouchableOpacity>
+    <TouchableOpacity>
+      <MENU_BOTTOM height={30} width={30} />
+    </TouchableOpacity>
+  </View>
+</View>
+
 
       <FlatList
         data={messages}
@@ -159,7 +162,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 24,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: "#E0E0E0",
     backgroundColor: "#ffffff",
@@ -196,6 +199,13 @@ const styles = StyleSheet.create({
     color: colors.gray_ligtht,
     fontFamily: fonts.Proxima_Nova_Semibold,
     paddingTop: 2,
+  },
+  center: {
+    position: "absolute", // Place the center content absolutely
+    left: 0,
+    right: 0,
+    flexDirection: "column",
+    alignItems: "center",
   },
   videoButton: {
     marginRight: 16,

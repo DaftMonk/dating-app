@@ -3,6 +3,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Image,
   Text,
   StyleSheet,
   Platform,
@@ -55,7 +56,12 @@ export function MessageInput({ onSend }: Props) {
           <MUSIC height={40} width={40} />
         </TouchableOpacity>
         <TouchableOpacity activeOpacity={0.6} style={styles.bottom_button}>
-          <LOAD height={40} width={40} />
+        <Image
+            source={require("@images/load.png")}
+            style={styles.icon}
+            resizeMode="contain"
+          />
+
         </TouchableOpacity>
       </View>
     </View>
@@ -106,5 +112,9 @@ const styles = StyleSheet.create({
   bottom_button: {
     paddingRight: 5,
     paddingTop: 8,
+  },
+  icon: {
+    height: 40,
+    width: 40,
   },
 });

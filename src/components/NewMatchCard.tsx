@@ -23,7 +23,7 @@ export function NewMatchCard({ photo, name, marker, hasCamera }: Props) {
       <View style={styles.row}>
         <Text style={styles.name}>{name}</Text>
         {hasCamera && (
-          <CAMERA_BLUE height={25} width={25} style={styles.camera} />
+          <CAMERA_BLUE height={24} width={24} style={styles.camera} />
         )}
       </View>
     </TouchableOpacity>
