@@ -48,7 +48,7 @@ export function MessageItem({
             )}
           </View>
           {hasCamera && (
-            <CAMERA_BLUE height={25} width={25} style={styles.cameraIcon} />
+            <CAMERA_BLUE height={24} width={24} style={styles.cameraIcon} />
           )}
           {hasEmoji && (
             <GOLDEN_HEART
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 6,
     borderRadius: 12,
-    marginLeft: 8,
+  
   },
   yourTurnText: {
     color: "white",
