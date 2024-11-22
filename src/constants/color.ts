@@ -9,6 +9,7 @@ const gray_darker = '#4f555c'
 const bg_light = '#f8f8f8'
 const blue_dark = '#2c8be5'
 const blue_sender = '#46a4f3'
+
 const gray_reciever = '#eaebee'
 const timestamp_black = '#33373a'
 const border_light = '#d2d2d3'
