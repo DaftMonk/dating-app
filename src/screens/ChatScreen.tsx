@@ -10,7 +10,6 @@ import {
   StyleSheet,
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Ionicons } from "@expo/vector-icons";
 import { RootStackParamList } from "@app-types/navigation";
 import { ChatBubble } from "components/ChatBubble";
 import { SuggestedMessage } from "components/SuggestedMessage";
@@ -19,77 +18,30 @@ import BACK_ICON from "@svgs/back.svg";
 import VIDEO_ICON from "@svgs/video.svg";
 import MENU_BOTTOM from "@svgs/menu-bottom.svg";
 import { colors, fonts } from "@constants";
+import { useApp } from "../context/AppContext";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
 
-const INITIAL_MESSAGES = [
-  {
-    id: "1",
-    message: "Thursday it is!",
-    isSender: false,
-    showHeart: true,
-    isFlat: false,
-    showImage: false,
-    isSpace: false,
-  },
-  {
-    id: "2",
-    message: "Where are we headed?",
-    isSender: false,
-    showHeart: true,
-    isFlat: true,
-    showImage: true,
-    isSpace: true,
-  },
-  {
-    id: "3",
-    message: "Let's meet at Cellarmasters at 7:30",
-    isSender: true,
-    isFlat: false,
-    isSpace: false,
-  },
-  {
-    id: "4",
-    message: "Wear a cute dress ;)",
-    isSender: true,
-    showHeart: true,
-    isLiked: true,
-    isFlat: true,
-    isSpace: true,
-  },
-  {
-    id: "5",
-    message: "Ohh I like it 🥰 it's a date",
-    isSender: false,
-    showHeart: true,
-    isFlat: false,
-    showImage: true,
-    isSpace: true,
-  },
-  {
-    id: "6",
-    message: "Perfect. Shoot me your phone number btw, ",
-    isSender: true,
-    showSent: true,
-    isFlat: false,
-    isSpace: true,
-  },
-  {
-    id: "7",
-    message: "3528173691",
-    isSender: false,
-    isUnderlined: true,
-    showHeart: true,
-    date: "Tue, Oct 29,",
-    time: "1:14 AM",
-    isFlat: false,
-    showImage: true,
-    isSpace: true,
-  },
-];
-
 export function ChatScreen({ route, navigation }: Props) {
-  const [messages, setMessages] = useState(INITIAL_MESSAGES);
+  const { messages, setMessages } = useApp();
+  const chatMessages = messages[route.params.matchId] || [];
+  const [showShuffle, setShowShuffle] = useState(true);
+
+  const handleSend = (message: string) => {
+    const newMessage = {
+      id: Date.now().toString(),
+      message,
+      isSender: true,
+      showSent: true,
+      isFlat: false,
+      isSpace: false,
+    };
+
+    setMessages({
+      ...messages,
+      [route.params.matchId]: [...chatMessages, newMessage],
+    });
+  };
 
   return (
     <KeyboardAvoidingView
@@ -97,57 +49,47 @@ export function ChatScreen({ route, navigation }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={90}
     >
+      <View style={styles.header}>
+        <TouchableOpacity
+          style={styles.left}
+          onPress={() => navigation.goBack()}
+        >
+          <BACK_ICON height={30} width={30} />
+        </TouchableOpacity>
 
+        <View style={styles.center}>
+          <Image source={{ uri: route.params.photo }} style={styles.avatar} />
+          <Text style={styles.name}>{route.params.name}</Text>
+        </View>
 
-<View style={styles.header}>
-  <TouchableOpacity
-    style={styles.left}
-    onPress={() => navigation.goBack()}
-  >
-    <BACK_ICON height={30} width={30} />
-  </TouchableOpacity>
-
-  <View style={styles.center}>
-    <Image source={{ uri: route.params.photo }} style={styles.avatar} />
-    <Text style={styles.name}>{route.params.name}</Text>
-  </View>
-
-  <View style={styles.row}>
-    <TouchableOpacity style={styles.videoButton}>
-      <VIDEO_ICON height={30} width={30} fill="red" /> 
-    </TouchableOpacity>
-    <TouchableOpacity>
-      <MENU_BOTTOM height={30} width={30} />
-    </TouchableOpacity>
-  </View>
-</View>
-
+        <View style={styles.row}>
+          <TouchableOpacity 
+            style={styles.videoButton}
+            onPress={() => setShowShuffle(!showShuffle)}
+          >
+            <VIDEO_ICON height={30} width={30} fill="red" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <MENU_BOTTOM height={30} width={30} />
+          </TouchableOpacity>
+        </View>
+      </View>
 
       <FlatList
-        data={messages}
-        renderItem={({ item }) => <ChatBubble {...item} />}
+        data={chatMessages}
+        renderItem={({ item }) => (
+          <ChatBubble {...item} profileImage={route.params.photo} />
+        )}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.messagesList}
         ListFooterComponent={() => (
-          <SuggestedMessage message="Just wanted to say hi! What are your plans for the day?" />
+          showShuffle ? (
+            <SuggestedMessage onSend={handleSend} />
+          ) : null
         )}
       />
 
-      <MessageInput
-        onSend={(message) => {
-          setMessages([
-            ...messages,
-            {
-              id: Date.now().toString(),
-              message,
-              isSender: true,
-              showSent: true,
-              isFlat: false,
-              isSpace: false,
-            },
-          ]);
-        }}
-      />
+      <MessageInput onSend={handleSend} />
     </KeyboardAvoidingView>
   );
 }
@@ -166,21 +108,21 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: "#E0E0E0",
     backgroundColor: "#ffffff",
-    // Add shadow for iOS
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
     zIndex: 1000,
-    // Add elevation for Android
     elevation: 3,
   },
   left: {
     paddingHorizontal: 5,
   },
-  col: {
-    flex: 1,
-    justifyContent: "center",
+  center: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    flexDirection: "column",
     alignItems: "center",
   },
   row: {
@@ -199,13 +141,6 @@ const styles = StyleSheet.create({
     color: colors.gray_ligtht,
     fontFamily: fonts.Proxima_Nova_Semibold,
     paddingTop: 2,
-  },
-  center: {
-    position: "absolute", // Place the center content absolutely
-    left: 0,
-    right: 0,
-    flexDirection: "column",
-    alignItems: "center",
   },
   videoButton: {
     marginRight: 16,

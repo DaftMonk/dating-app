@@ -21,14 +21,41 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
+import { useApp } from "../context/AppContext";
 
 const screenWidth = Dimensions.get("window").width;
 
 type Props = NativeStackScreenProps<RootStackParamList, "Matches">;
 
 export function MatchesScreen({ navigation }: Props) {
+  const { profiles, messages, likesCount, blurredProfile } = useApp();
+  
+  const getLastMessage = (profileId: string) => {
+    const chatMessages = messages[profileId] || [];
+    return chatMessages[chatMessages.length - 1]?.message;
+  };
+
+  const isLastMessageFromUser = (profileId: string) => {
+    const chatMessages = messages[profileId] || [];
+    return chatMessages[chatMessages.length - 1]?.isSender || false;
+  };
+
+  const shouldShowYourTurn = (profileId: string) => {
+    const chatMessages = messages[profileId] || [];
+    const lastMessage = chatMessages[chatMessages.length - 1];
+    return lastMessage && !lastMessage.isSender;
+  };
+
+  const hasMessages = (profileId: string) => {
+    return (messages[profileId]?.length || 0) > 0;
+  };
+
+  const existingMatches = profiles.filter(profile => hasMessages(profile.id));
+  const newMatches = profiles.filter(profile => !hasMessages(profile.id));
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -41,9 +68,12 @@ export function MatchesScreen({ navigation }: Props) {
             />
           </View>
 
-          <View style={styles.shieldContainer}>
+          <TouchableOpacity 
+            style={styles.shieldContainer} 
+            onPress={() => navigation.navigate("Admin")}
+          >
             <SHIELD height={24} width={24} color={colors.gray} />
-          </View>
+          </TouchableOpacity>
         </View>
       </View>
 
@@ -58,15 +88,13 @@ export function MatchesScreen({ navigation }: Props) {
             <View style={styles.likesCard}>
               <View style={styles.blurCard}>
                 <Image
-                  source={{
-                    uri: "https://randomuser.me/api/portraits/women/20.jpg",
-                  }}
+                  source={{ uri: blurredProfile }}
                   style={styles.blurImg}
                 />
                 <BlurView intensity={20} style={styles.blurView} />
               </View>
               <View style={styles.likeContainer}>
-                <Text style={styles.likesCount}>25</Text>
+                <Text style={styles.likesCount}>{likesCount}</Text>
               </View>
               <GOLDEN_HEART
                 height={45}
@@ -77,54 +105,59 @@ export function MatchesScreen({ navigation }: Props) {
             </View>
             <Text style={styles.likesText}>Likes</Text>
           </View>
-          {NEW_MATCHES_DATA.map((match) => (
+          {newMatches.map((match) => (
             <NewMatchCard
               key={match.id}
               photo={match.photo}
               name={match.name}
-              marker={match.offline}
+              marker={false}
               hasCamera={match.hasCamera}
             />
           ))}
         </ScrollView>
 
-        <SectionHeader title="Messages" style={styles.bottomSection} />
-        <FlatList
-          data={MATCHES_DATA}
-          showsVerticalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <MessageItem
-              photo={item.photo}
-              name={item.name}
-              message={item.message}
-              phoneNumber={item.phoneNumber}
-              hasCamera={item.hasCamera}
-              hasEmoji={item.hasEmoji}
-              showYourTurn={item.showYourTurn}
-              online={item?.online}
-              liked={item.liked}
-              onPress={() =>
-                navigation.navigate("Chat", {
-                  matchId: item.id,
-                  name: item.name,
-                  photo: item.photo,
-                })
-              }
+        {existingMatches.length > 0 && (
+          <>
+            <SectionHeader title="Messages" style={styles.bottomSection} />
+            <FlatList
+              data={existingMatches}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <MessageItem
+                  photo={item.photo}
+                  name={item.name}
+                  message={getLastMessage(item.id)}
+                  phoneNumber={item.phoneNumber}
+                  hasCamera={item.hasCamera}
+                  hasEmoji={item.hasEmoji}
+                  showYourTurn={shouldShowYourTurn(item.id)}
+                  online={item.online}
+                  liked={item.liked}
+                  lastMessageFromUser={isLastMessageFromUser(item.id)}
+                  onPress={() =>
+                    navigation.navigate("Chat", {
+                      matchId: item.id,
+                      name: item.name,
+                      photo: item.photo,
+                    })
+                  }
+                />
+              )}
+              keyExtractor={(item) => item.id}
+              scrollEnabled={false}
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    width: screenWidth - 104,
+                    borderBottomWidth: 1,
+                    borderBottomColor: "#E0E0E0",
+                    alignSelf: "flex-end",
+                  }}
+                />
+              )}
             />
-          )}
-          keyExtractor={(item) => item.id}
-          scrollEnabled={false}
-          ItemSeparatorComponent={() => (
-            <View
-              style={{
-                width: screenWidth - 104,
-                borderBottomWidth: 1,
-                borderBottomColor: "#E0E0E0",
-                alignSelf: "flex-end",
-              }}
-            />
-          )}
-        />
+          </>
+        )}
       </ScrollView>
 
       <View style={styles.tabBar}>
@@ -133,7 +166,7 @@ export function MatchesScreen({ navigation }: Props) {
         <View style={styles.starContainer}>
           <STAR height={36} width={36} color={colors.gray} />
           <View style={styles.starBadge}>
-            <Text style={styles.starBadgeText}>25</Text>
+            <Text style={styles.starBadgeText}>{likesCount}</Text>
           </View>
         </View>
         <CHAT height={36} width={36} color={colors.gray} />
@@ -153,9 +186,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff",
-    // Add shadow for iOS
     zIndex: 1000,
-    // Add elevation for Android
     marginBottom: 16,
   },
   logoContainer: {
@@ -197,7 +228,6 @@ const styles = StyleSheet.create({
     marginRight: 8,
     borderWidth: 3,
     borderColor: colors.gold_light,
-
     shadowColor: colors.gold_light,
     shadowOffset: { width: 1, height: 2 },
     shadowOpacity: 0.4,
@@ -211,13 +241,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   blurView: {
-    position: "absolute", // Overlay the blur
+    position: "absolute",
     height: "100%",
     width: "100%",
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "white",
-    overflow: "hidden", // Ensure blur stays within the border
+    overflow: "hidden",
   },
   blurImg: {
     height: "100%",

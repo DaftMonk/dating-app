@@ -1,23 +1,47 @@
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 import REFRESH from "@svgs/refresh.svg";
 import { colors, fonts } from "@constants";
+import { useState } from "react";
+
+const SUGGESTED_MESSAGES = [
+  "Just wanted to say hi! What are your plans for the day?",
+  "Hey there! Your profile caught my eye. What's your favorite local spot?",
+  "Hi! Love your travel photos. Which place was your favorite?",
+  "Hey! I noticed we both love hiking. Have you tried any good trails lately?",
+  "Your dog is adorable! What's their name?",
+  "I see you're into photography too! What camera do you use?",
+  "That food pic looks amazing! Is that from a local restaurant?",
+  "Your music taste is great! Have you been to any good concerts lately?",
+  "Hi there! Coffee or tea person?",
+  "Love your style! Where's your favorite place to shop?"
+];
 
 type Props = {
-  message: string;
+  onSend?: (message: string) => void;
 };
 
-export function SuggestedMessage({ message }: Props) {
+export function SuggestedMessage({ onSend }: Props) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const handleShuffle = () => {
+    setCurrentIndex((prev) => (prev + 1) % SUGGESTED_MESSAGES.length);
+  };
+
+  const currentMessage = SUGGESTED_MESSAGES[currentIndex];
+
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
+      <TouchableOpacity style={styles.row} onPress={handleShuffle}>
         <REFRESH height={20} width={20} />
         <Text style={styles.tapText}>Tap to shuffle</Text>
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.messageContainer}>
-        <Text style={styles.message}>{message}</Text>
-        <TouchableOpacity style={styles.sendButton}>
+        <Text style={styles.message}>{currentMessage}</Text>
+        <TouchableOpacity 
+          style={styles.sendButton}
+          onPress={() => onSend?.(currentMessage)}
+        >
           <Text style={styles.sendText}>Send</Text>
         </TouchableOpacity>
       </View>

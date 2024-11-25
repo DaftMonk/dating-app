@@ -1,14 +1,16 @@
-import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, Dimensions } from "react-native";
 import HEART_LIKE from "@svgs/like.svg";
 import HEART_UNLIKE from "@svgs/unlike.svg";
 import SENT from "@svgs/sent.svg";
 import PLUS from "@svgs/add.svg";
 import { colors, fonts } from "@constants";
 
+const screenWidth = Dimensions.get('window').width;
+const MAX_BUBBLE_WIDTH = screenWidth * 0.7;
+
 type Props = {
   message: string;
   date?: string;
-  time?: string;
   isSender: boolean;
   showHeart?: boolean;
   isLiked?: boolean;
@@ -17,12 +19,12 @@ type Props = {
   isFlat?: boolean;
   showImage?: boolean;
   isSpace?: boolean;
+  profileImage?: string;
 };
 
 export function ChatBubble({
   message,
   date,
-  time,
   isSender,
   showHeart,
   showSent,
@@ -31,13 +33,12 @@ export function ChatBubble({
   isFlat,
   showImage,
   isSpace,
+  profileImage,
 }: Props) {
   return (
     <View>
-      {date && time && (
-        <Text style={styles.date}>
-          {date} <Text style={styles.time}>{time}</Text>
-        </Text>
+      {date && (
+        <Text style={styles.date}>{date}</Text>
       )}
       <View
         style={[
@@ -58,9 +59,7 @@ export function ChatBubble({
                 <>
                   {showImage ? (
                     <Image
-                      source={{
-                        uri: "https://randomuser.me/api/portraits/women/1.jpg",
-                      }}
+                      source={{ uri: profileImage }}
                       style={styles.avatar}
                     />
                   ) : (
@@ -128,11 +127,12 @@ const styles = StyleSheet.create({
   senderContainer: {
     flexDirection: "row-reverse",
     alignSelf: "flex-end",
+    maxWidth: MAX_BUBBLE_WIDTH,
   },
   receiverContainer: {
     alignSelf: "flex-start",
+    maxWidth: MAX_BUBBLE_WIDTH,
   },
-
   bubbleWrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -145,15 +145,15 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   avatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    marginRight: 4,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 8,
   },
   bubble: {
     padding: 12,
     borderRadius: 20,
-    paddingVertical: 7,
+    paddingVertical: 10,
     maxWidth: "100%",
   },
   senderBubble: {
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
-    letterSpacing: 0.6,
+    letterSpacing: 0.3,
     fontFamily: fonts.Proxima_Nova_Regular,
   },
   senderText: {
@@ -205,12 +205,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: fonts.Proxima_Nova_Semibold,
     color: colors.timestamp_black,
-    alignSelf: "center",
-    marginTop: 10,
-    marginBottom: 8,
-  },
-  time: {
-    fontFamily: fonts.Proxima_Nova_Regular,
-    fontSize: 12,
+    marginVertical: 16,
+    textAlign: "center",
   },
 });

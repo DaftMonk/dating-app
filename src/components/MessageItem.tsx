@@ -1,5 +1,4 @@
 import { colors, fonts } from "@constants";
-import { Ionicons } from "@expo/vector-icons";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import CAMERA_BLUE from "@svgs/camera_blue.svg";
 import GOLDEN_HEART from "@svgs/golden_heart.svg";
@@ -16,6 +15,7 @@ type Props = {
   liked?: boolean;
   onPress: () => void;
   online?: boolean;
+  lastMessageFromUser?: boolean;
 };
 
 export function MessageItem({
@@ -29,6 +29,7 @@ export function MessageItem({
   liked,
   online,
   onPress,
+  lastMessageFromUser,
 }: Props) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -69,12 +70,14 @@ export function MessageItem({
           </Text>
         ) : (
           <View style={styles.messageContainer}>
-            <BACK_ARROW
-              height={10}
-              width={10}
-              color={"#8E8E8E"}
-              style={styles.replyIcon}
-            />
+            {lastMessageFromUser && (
+              <BACK_ARROW
+                height={10}
+                width={10}
+                color={"#8E8E8E"}
+                style={styles.replyIcon}
+              />
+            )}
             <Text style={styles.message} numberOfLines={1}>
               {message}
             </Text>
@@ -170,9 +173,8 @@ const styles = StyleSheet.create({
   yourTurn: {
     backgroundColor: "#000",
     paddingHorizontal: 8,
-    paddingVertical: 6,
+    paddingVertical: 4,
     borderRadius: 12,
-  
   },
   yourTurnText: {
     color: "white",
