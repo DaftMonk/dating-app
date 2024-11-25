@@ -62,7 +62,7 @@ export const DEFAULT_CONVERSATIONS: ConversationTemplate[] = [
         id: "1",
         message: "I see you're a fellow foodie! 🍝",
         isSender: true,
-        showSent: true,
+        showSent: false,
         isFlat: false,
         isSpace: true,
         date: "Monday, October 28"

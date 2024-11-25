@@ -5,6 +5,9 @@
     "strict": true,
    "baseUrl": "./src",
     "paths": {
+      "@/*": [
+        "src/*"
+      ],
       "@svgs/*": ["assets/svgs/*"],
       "@fonts/*": ["assets/fonts/*"],
       "@images/*": ["assets/images/*"],
@@ -16,5 +19,17 @@
       "@constants": ["constants"],
       "@constants/*": ["constants/*"],
     }
-  }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "index.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
+
+
+
+

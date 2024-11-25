@@ -50,17 +50,20 @@ export function ChatScreen({ route, navigation }: Props) {
       keyboardVerticalOffset={90}
     >
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.left}
-          onPress={() => navigation.goBack()}
-        >
-          <BACK_ICON height={30} width={30} />
-        </TouchableOpacity>
-
         <View style={styles.center}>
           <Image source={{ uri: route.params.photo }} style={styles.avatar} />
           <Text style={styles.name}>{route.params.name}</Text>
         </View>
+
+        <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.left}
+          onPress={() => navigation.navigate("Matches")}
+        >
+          <BACK_ICON height={30} width={30} />
+        </TouchableOpacity>
+        </View>
+
 
         <View style={styles.row}>
           <TouchableOpacity 

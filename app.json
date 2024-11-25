@@ -3,18 +3,28 @@
     "name": "Tinder",
     "slug": "datingapp",
     "version": "1.0.0",
+    "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "android": {
-      "package": "com.ignitiondating.datingapp",
-      "newArchEnabled": true,
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#ffffff"
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ignitiondating.datingapp",
+      "config": {
+        "usesNonExemptEncryption": false
       }
     },
-    "ios": {
-      "bundleIdentifier": "com.ignitiondating.datingapp",
-      "newArchEnabled": true
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.ignitiondating.datingapp",
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-font"
@@ -25,5 +35,6 @@
       }
     },
     "owner": "tyhenkel"
+
   }
 }

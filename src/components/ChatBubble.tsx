@@ -5,12 +5,10 @@ import SENT from "@svgs/sent.svg";
 import PLUS from "@svgs/add.svg";
 import { colors, fonts } from "@constants";
 
-const screenWidth = Dimensions.get('window').width;
-const MAX_BUBBLE_WIDTH = screenWidth * 0.7;
-
 type Props = {
   message: string;
   date?: string;
+  time?: string;
   isSender: boolean;
   showHeart?: boolean;
   isLiked?: boolean;
@@ -22,9 +20,13 @@ type Props = {
   profileImage?: string;
 };
 
+const screenWidth = Dimensions.get('window').width;
+const MAX_BUBBLE_WIDTH = screenWidth * 0.7; // Reduced to accommodate heart
+
 export function ChatBubble({
   message,
   date,
+  time,
   isSender,
   showHeart,
   showSent,
@@ -37,124 +39,102 @@ export function ChatBubble({
 }: Props) {
   return (
     <View>
-      {date && (
-        <Text style={styles.date}>{date}</Text>
+      {date && time && (
+        <Text style={styles.date}>
+          {date} <Text style={styles.time}>{time}</Text>
+        </Text>
       )}
-      <View
-        style={[
-          styles.container,
-          isSender
-            ? {
-                ...styles.senderContainer,
-                marginTop: isSpace ? 4 : 0,
-                marginBottom: isSpace ? 8 : 0,
-              }
-            : { ...styles.receiverContainer, marginBottom: isSpace ? 6 : -2 },
-        ]}
-      >
-        <View style={styles.bubbleWrapper}>
-          <View>
-            <View style={styles.row}>
-              {!isSender && (
-                <>
-                  {showImage ? (
-                    <Image
-                      source={{ uri: profileImage }}
-                      style={styles.avatar}
-                    />
-                  ) : (
-                    <View style={styles.avatar} />
-                  )}
-                </>
-              )}
-              <View
-                style={[
-                  styles.bubble,
-                  isSender
-                    ? {
-                        ...styles.senderBubble,
-                        borderTopRightRadius: isFlat ? 4 : 20,
-                      }
-                    : {
-                        ...styles.receiverBubble,
-                        borderTopLeftRadius: isFlat ? 4 : 20,
-                      },
-                ]}
-              >
-                <Text
-                  style={[
-                    styles.messageText,
-                    isSender ? styles.senderText : styles.receiverText,
-                    isUnderlined && styles.underlinedText,
-                  ]}
-                >
-                  {message}
-                </Text>
-              </View>
-            </View>
-            {showSent && (
-              <View style={styles.sentContainer}>
-                <View>
-                  <SENT height={30} width={30} />
-                  <PLUS height={10} width={10} style={styles.plus} />
-                </View>
-                <Text style={styles.sentText}>Sent</Text>
-              </View>
-            )}
+      <View style={styles.outerContainer}>
+        <View
+          style={[
+            styles.container,
+            isSender ? styles.senderContainer : styles.receiverContainer,
+            { marginVertical: isSpace ? 8 : 4 }
+          ]}
+        >
+          {!isSender && showImage && (
+            <Image
+              source={{
+                uri: profileImage,
+              }}
+              style={styles.avatar}
+            />
+          )}
+          <View
+            style={[
+              styles.bubble,
+              isSender
+                ? {
+                    ...styles.senderBubble,
+                    borderTopRightRadius: isFlat ? 4 : 20,
+                  }
+                : {
+                    ...styles.receiverBubble,
+                    borderTopLeftRadius: isFlat ? 4 : 20,
+                  },
+            ]}
+          >
+            <Text
+              style={[
+                styles.messageText,
+                isSender ? styles.senderText : styles.receiverText,
+                isUnderlined && styles.underlinedText,
+              ]}
+            >
+              {message}
+            </Text>
           </View>
         </View>
         {showHeart && (
           <TouchableOpacity style={styles.heartButton}>
             {isLiked ? (
-              <HEART_LIKE height={26} width={26} color={colors.primary} />
+              <HEART_LIKE height={24} width={24} color={colors.primary} />
             ) : (
-              <HEART_UNLIKE height={26} width={26} />
+              <HEART_UNLIKE height={24} width={24} />
             )}
           </TouchableOpacity>
         )}
       </View>
+      {showSent && (
+        <View style={[styles.sentContainer, isSender && styles.sentContainerRight]}>
+        
+                  <SENT height={30} width={30} />
+                  <PLUS height={10} width={10} style={styles.plus} />
+          <Text style={styles.sentText}>Sent</Text>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  outerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   container: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    flex: 1,
   },
   senderContainer: {
-    flexDirection: "row-reverse",
-    alignSelf: "flex-end",
-    maxWidth: MAX_BUBBLE_WIDTH,
+    justifyContent: 'flex-end',
   },
   receiverContainer: {
-    alignSelf: "flex-start",
-    maxWidth: MAX_BUBBLE_WIDTH,
-  },
-  bubbleWrapper: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "baseline",
-    maxWidth: "100%",
-  },
-  row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
+    justifyContent: 'flex-start',
   },
   avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 44,
+    height: 44,
+    borderRadius: 25,
     marginRight: 8,
   },
   bubble: {
-    padding: 12,
-    borderRadius: 20,
     paddingVertical: 10,
-    maxWidth: "100%",
+    paddingHorizontal: 12,
+    borderRadius: 20,
+    maxWidth: MAX_BUBBLE_WIDTH,
   },
   senderBubble: {
     backgroundColor: colors.blue_sender,
@@ -170,16 +150,21 @@ const styles = StyleSheet.create({
     fontFamily: fonts.Proxima_Nova_Regular,
   },
   senderText: {
-    color: "white",
+    color: 'white',
   },
   receiverText: {
-    color: "#000",
+    color: '#000',
   },
   underlinedText: {
-    textDecorationLine: "underline",
+    textDecorationLine: 'underline',
   },
   heartButton: {
-    marginHorizontal: 8,
+    marginLeft: 8,
+    width: 24,
+    height: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  
   },
   sentContainer: {
     flexDirection: "row",
@@ -187,25 +172,33 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 4,
     alignSelf: "flex-end",
-    paddingTop: 5,
+    paddingTop: 0,
   },
+  sentContainerRight: {
+    alignSelf: 'flex-end',
+  },
+
   plus: {
     position: "absolute",
-    top: 1,
-    right: -10,
+    top: 5,
+    right: 37,
   },
   sentText: {
-    fontSize: 14,
+    fontSize: 13,
     color: colors.gray_darker,
-    marginLeft: 4,
-    paddingLeft: 12,
+    marginLeft: 14,
+    paddingLeft: 4,
     fontFamily: fonts.Proxima_Nova_Regular,
   },
   date: {
     fontSize: 13,
     fontFamily: fonts.Proxima_Nova_Semibold,
     color: colors.timestamp_black,
-    marginVertical: 16,
-    textAlign: "center",
+    alignSelf: 'center',
+    marginVertical: 8,
+  },
+  time: {
+    fontFamily: fonts.Proxima_Nova_Regular,
+    fontSize: 12,
   },
 });

@@ -1,7 +1,7 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache(true);
   return {
-    presets: ['babel-preset-expo'],
+    presets: ["babel-preset-expo"],
     plugins: [
       [
         'module-resolver',
@@ -9,6 +9,8 @@ module.exports = function(api) {
           root: ['./src'],
           alias: {
             '@': './src',
+            '@assets': './src/assets',
+            '@svgs': './src/assets/svgs',
           },
         },
       ],

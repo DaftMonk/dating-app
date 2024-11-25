@@ -8,7 +8,11 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "prebuild": "expo prebuild",
-    "build:ios": "eas build --local --platform ios"
+    "build:ios": "eas build --profile development --platform ios",
+    "build:ios-local": "eas build --local --platform ios",
+    "build-preview": "eas build --profile preview --platform ios",
+    "build-prod": "eas build --profile production --platform ios",
+    "deploy-ios": "eas submit --platform ios"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.6",
