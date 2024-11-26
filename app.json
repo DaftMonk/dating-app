@@ -1,14 +1,12 @@
 {
   "expo": {
-    "name": "Tinder",
+    "name": "Dating App",
     "slug": "datingapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ignitiondating.datingapp",
@@ -18,23 +16,16 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ignitiondating.datingapp",
+      "package": "com.ignitiondating.datingapp"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "expo-font"
-    ],
+    "plugins": ["expo-font"],
     "extra": {
       "eas": {
         "projectId": "cafe5c42-7da0-4c09-b049-cc9cc035122e"
       }
     },
     "owner": "tyhenkel"
-
   }
 }

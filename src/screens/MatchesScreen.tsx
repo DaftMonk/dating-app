@@ -87,10 +87,10 @@ export function MatchesScreen({ navigation }: Props) {
           <View>
             <View style={styles.likesCard}>
               <View style={styles.blurCard}>
-                <Image
+                { blurredProfile ? <Image
                   source={{ uri: blurredProfile }}
                   style={styles.blurImg}
-                />
+                /> : <></> }
                 <BlurView intensity={20} style={styles.blurView} />
               </View>
               <View style={styles.likeContainer}>
