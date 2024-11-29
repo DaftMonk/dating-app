@@ -19,6 +19,7 @@ import VIDEO_ICON from "@svgs/video.svg";
 import MENU_BOTTOM from "@svgs/menu-bottom.svg";
 import { colors, fonts } from "@constants";
 import { useApp } from "../context/AppContext";
+import { MatchedWith } from "components/MatchedWith";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
 
@@ -49,24 +50,24 @@ export function ChatScreen({ route, navigation }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={90}
     >
+      {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.center}>
           <Image source={{ uri: route.params.photo }} style={styles.avatar} />
           <Text style={styles.name}>{route.params.name}</Text>
         </View>
-
+  
         <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.left}
-          onPress={() => navigation.navigate("Matches")}
-        >
-          <BACK_ICON height={30} width={30} />
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.left}
+            onPress={() => navigation.navigate("Matches")}
+          >
+            <BACK_ICON height={30} width={30} />
+          </TouchableOpacity>
         </View>
-
-
+  
         <View style={styles.row}>
-          <TouchableOpacity 
+          <TouchableOpacity
             style={styles.videoButton}
             onPress={() => setShowShuffle(!showShuffle)}
           >
@@ -77,24 +78,21 @@ export function ChatScreen({ route, navigation }: Props) {
           </TouchableOpacity>
         </View>
       </View>
-
-      <FlatList
-        data={chatMessages}
-        renderItem={({ item }) => (
-          <ChatBubble {...item} profileImage={route.params.photo} />
+  
+      {/* Content Section */}
+      <View style={styles.content}>
+        {chatMessages.length > 0 ? <MatchedWith /> : (
+          <View style={styles.fallbackContainer}>
+            <Text style={styles.fallbackText}>No messages yet!</Text>
+          </View>
         )}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.messagesList}
-        ListFooterComponent={() => (
-          showShuffle ? (
-            <SuggestedMessage onSend={handleSend} />
-          ) : null
-        )}
-      />
-
-      <MessageInput onSend={handleSend} />
+  
+        {/* Fixed Input Section */}
+        <MessageInput onSend={handleSend} />
+      </View>
     </KeyboardAvoidingView>
   );
+  
 }
 
 const styles = StyleSheet.create({
@@ -148,9 +146,21 @@ const styles = StyleSheet.create({
   videoButton: {
     marginRight: 16,
   },
+  content: {
+    flex: 1, // Ensures this section fills the remaining vertical space
+  },
   messagesList: {
     paddingVertical: 16,
-    width: "100%",
     paddingHorizontal: 8,
+  },
+  fallbackContainer: {
+    flex: 1, // Occupies the entire space if there are no messages
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fallbackText: {
+    fontSize: 16,
+    color: colors.gray_ligtht,
+    fontFamily: fonts.Proxima_Nova_Regular,
   },
 });
