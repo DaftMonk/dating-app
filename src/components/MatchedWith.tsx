@@ -1,7 +1,8 @@
 import { fonts } from "@constants";
-import { blue_dark, blue_sender, gray_dark, gray_darker } from "@constants/color";
+import { blue_dark, gray_dark, gray_darker } from "@constants/color";
+import SENT from "@svgs/sent.svg";
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export function MatchedWith() {
   return (
@@ -14,8 +15,12 @@ export function MatchedWith() {
       />
       <Text style={styles.infoText}>Know when <Text style={styles.highlight}>Selena</Text> has read your message.</Text>
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.buttonText}>Get Read Receipts</Text>
-      </TouchableOpacity>
+  <View style={styles.iconTextContainer}>
+    <SENT height={30} width={30}  style={styles.icon} /> 
+    <Text style={styles.buttonText}>Get Read Receipts</Text>
+  </View>
+</TouchableOpacity>
+
     </View>
   );
 }
@@ -63,8 +68,8 @@ const styles = StyleSheet.create({
 
   button: {
     backgroundColor: blue_dark,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 0,
+    paddingHorizontal: 10,
     borderRadius: 25,
     shadowColor: "#000", 
     shadowOffset: { width: 0, height: 4.8 },
@@ -73,6 +78,13 @@ const styles = StyleSheet.create({
     elevation: 6, 
 },
 
+iconTextContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  icon: {
+    marginRight: 0, 
+  },
 
   buttonText: {
     color: "#fff",
