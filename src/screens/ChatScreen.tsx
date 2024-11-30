@@ -1,24 +1,26 @@
+import { RootStackParamList } from "@app-types/navigation";
+import { colors, fonts } from "@constants";
+import { gray_darker } from "@constants/color";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import BACK_ICON from "@svgs/back.svg";
+import MENU_BOTTOM from "@svgs/menu-bottom.svg";
+import VIDEO_ICON from "@svgs/video.svg";
+import { ChatBubble } from "components/ChatBubble";
+import { MessageInput } from "components/MessageInput";
+import { SuggestedMessage } from "components/SuggestedMessage";
 import { useState } from "react";
 import {
-  View,
   FlatList,
   Image,
-  Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@app-types/navigation";
-import { ChatBubble } from "components/ChatBubble";
-import { SuggestedMessage } from "components/SuggestedMessage";
-import { MessageInput } from "components/MessageInput";
-import BACK_ICON from "@svgs/back.svg";
-import VIDEO_ICON from "@svgs/video.svg";
-import MENU_BOTTOM from "@svgs/menu-bottom.svg";
-import { colors, fonts } from "@constants";
 import { useApp } from "../context/AppContext";
+import CAMERA_BLUE from "@svgs/camera_blue.svg";
 import { MatchedWith } from "components/MatchedWith";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
@@ -27,6 +29,14 @@ export function ChatScreen({ route, navigation }: Props) {
   const { messages, setMessages } = useApp();
   const chatMessages = messages[route.params.matchId] || [];
   const [showShuffle, setShowShuffle] = useState(true);
+  const [isFlatListEnabled, setIsFlatListEnabled] = useState(false);
+
+  const { isNewMatch, photo, name } = route.params;
+
+
+  const enableFlatList = () => {
+    setIsFlatListEnabled(true);
+  };
 
   const handleSend = (message: string) => {
     const newMessage = {
@@ -54,9 +64,16 @@ export function ChatScreen({ route, navigation }: Props) {
       <View style={styles.header}>
         <View style={styles.center}>
           <Image source={{ uri: route.params.photo }} style={styles.avatar} />
-          <Text style={styles.name}>{route.params.name}</Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.name}>{route.params.name + " "}</Text>
+            
+            {
+              route.params.isNewMatch ? <CAMERA_BLUE height={14} width={14} /> : <></>
+            }
+            
+          </View>
         </View>
-  
+
         <View style={styles.row}>
           <TouchableOpacity
             style={styles.left}
@@ -65,7 +82,7 @@ export function ChatScreen({ route, navigation }: Props) {
             <BACK_ICON height={30} width={30} />
           </TouchableOpacity>
         </View>
-  
+
         <View style={styles.row}>
           <TouchableOpacity
             style={styles.videoButton}
@@ -78,21 +95,42 @@ export function ChatScreen({ route, navigation }: Props) {
           </TouchableOpacity>
         </View>
       </View>
-  
-      {/* Content Section */}
+
       <View style={styles.content}>
-        {chatMessages.length > 0 ? <MatchedWith /> : (
-          <View style={styles.fallbackContainer}>
-            <Text style={styles.fallbackText}>No messages yet!</Text>
-          </View>
-        )}
-  
-        {/* Fixed Input Section */}
-        <MessageInput onSend={handleSend} />
-      </View>
+      {isNewMatch && !isFlatListEnabled ? (
+        <MatchedWith profileImage={photo} enableMessages={enableFlatList} />
+      ) : (chatMessages.length === 0 && !isNewMatch) ? (
+        <View style={styles.fallbackContainer}>
+          <Text style={styles.fallbackText}>No messages yet!</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={chatMessages}
+          renderItem={({ item }) => (
+            <ChatBubble {...item} profileImage={photo} />
+          )}
+          keyExtractor={(item) => item.id}
+          contentContainerStyle={styles.messagesList}
+          ListHeaderComponent={() =>
+            isNewMatch ? (
+              <Text style={styles.matchedText}>
+                You matched with {name} 11/5/24
+              </Text>
+            ) : (
+              <></>
+            )
+          }
+          ListFooterComponent={() =>
+            (showShuffle && !isNewMatch) ? <SuggestedMessage onSend={() => {}} /> : null
+          }
+        />
+      )}
+
+      <MessageInput onSend={() => {}} />
+    </View>
+
     </KeyboardAvoidingView>
   );
-  
 }
 
 const styles = StyleSheet.create({
@@ -118,6 +156,20 @@ const styles = StyleSheet.create({
   },
   left: {
     paddingHorizontal: 5,
+  },
+  nameRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 2,
+  },
+  matchedText: {
+    fontSize: 14,
+    fontWeight: "500",
+    fontFamily: fonts.Proxima_Nova_Regular,
+    marginBottom: 0,
+    marginTop: -5,
+    textAlign: "center",
+    color: gray_darker,
   },
   center: {
     position: "absolute",

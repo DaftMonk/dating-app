@@ -4,6 +4,7 @@ export type RootStackParamList = {
     matchId: string;
     name: string;
     photo: string;
+    isNewMatch?: boolean;
   };
   Admin: undefined;
 };
