@@ -33,7 +33,6 @@ export function ChatScreen({ route, navigation }: Props) {
 
   const { isNewMatch, photo, name } = route.params;
 
-
   const enableFlatList = () => {
     setIsFlatListEnabled(true);
   };
@@ -66,11 +65,12 @@ export function ChatScreen({ route, navigation }: Props) {
           <Image source={{ uri: route.params.photo }} style={styles.avatar} />
           <View style={styles.nameRow}>
             <Text style={styles.name}>{route.params.name + " "}</Text>
-            
-            {
-              route.params.isNewMatch ? <CAMERA_BLUE height={14} width={14} /> : <></>
-            }
-            
+
+            {route.params.isNewMatch ? (
+              <CAMERA_BLUE height={14} width={14} />
+            ) : (
+              <></>
+            )}
           </View>
         </View>
 
@@ -97,38 +97,35 @@ export function ChatScreen({ route, navigation }: Props) {
       </View>
 
       <View style={styles.content}>
-      {isNewMatch && !isFlatListEnabled ? (
-        <MatchedWith profileImage={photo} enableMessages={enableFlatList} />
-      ) : (chatMessages.length === 0 && !isNewMatch) ? (
-        <View style={styles.fallbackContainer}>
-          <Text style={styles.fallbackText}>No messages yet!</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={chatMessages}
-          renderItem={({ item }) => (
-            <ChatBubble {...item} profileImage={photo} />
-          )}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.messagesList}
-          ListHeaderComponent={() =>
-            isNewMatch ? (
+        {isNewMatch && !isFlatListEnabled ? (
+          <MatchedWith profileImage={photo} enableMessages={enableFlatList} />
+        ) : chatMessages.length === 0 && !isNewMatch ? (
+          <View style={styles.fallbackContainer}>
+            <Text style={styles.fallbackText}>No messages yet!</Text>
+          </View>
+        ) : (
+          <FlatList
+            data={chatMessages}
+            renderItem={({ item }) => (
+              <ChatBubble {...item} profileImage={photo} />
+            )}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.messagesList}
+            ListHeaderComponent={() => (
               <Text style={styles.matchedText}>
                 You matched with {name} 11/5/24
               </Text>
-            ) : (
-              <></>
-            )
-          }
-          ListFooterComponent={() =>
-            (showShuffle && !isNewMatch) ? <SuggestedMessage onSend={() => {}} /> : null
-          }
-        />
-      )}
+            )}
+            ListFooterComponent={() =>
+              showShuffle && !isNewMatch ? (
+                <SuggestedMessage onSend={() => {}} />
+              ) : null
+            }
+          />
+        )}
 
-      <MessageInput onSend={() => {}} />
-    </View>
-
+        <MessageInput onSend={() => {}} />
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -167,7 +164,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontFamily: fonts.Proxima_Nova_Regular,
     marginBottom: 0,
-    marginTop: -5,
+    marginTop: -6,
     textAlign: "center",
     color: gray_darker,
   },
