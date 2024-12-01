@@ -17,6 +17,8 @@
   "dependencies": {
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
+    "date-fns": "^4.1.0",
+    "@react-native-community/datetimepicker": "7.6.1",
     "expo": "~52.0.0",
     "expo-blur": "~13.0.2",
     "expo-dev-client": "~4.0.29",

@@ -1,3 +1,4 @@
+import { Profile } from "@app-types/types";
 import React, { useState } from 'react';
 import {
   View,
@@ -12,32 +13,9 @@ import {
 import { colors, fonts } from '@constants';
 import * as ImagePicker from 'expo-image-picker';
 import { useApp } from '../context/AppContext';
-
-type ChatMessage = {
-  id: string;
-  message: string;
-  isSender: boolean;
-  showHeart?: boolean;
-  isLiked?: boolean;
-  showSent?: boolean;
-  isUnderlined?: boolean;
-  isFlat?: boolean;
-  showImage?: boolean;
-  isSpace?: boolean;
-};
-
-type Profile = {
-  id: string;
-  name: string;
-  photo: string;
-  message?: string;
-  phoneNumber?: string;
-  hasCamera?: boolean;
-  hasEmoji?: boolean;
-  showYourTurn?: boolean;
-  liked?: boolean;
-  online?: boolean;
-};
+import { getCurrentDate, formatMatchDate } from '../utils/dateUtils';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { Platform } from 'react-native';
 
 export function AdminScreen() {
   const { profiles, setProfiles, messages, setMessages } = useApp();
@@ -45,6 +23,15 @@ export function AdminScreen() {
   const [selectedProfileId, setSelectedProfileId] = useState<string>('');
   const [newProfile, setNewProfile] = useState<Partial<Profile>>({});
   const [imageUrl, setImageUrl] = useState('');
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [matchDate, setMatchDate] = useState(getCurrentDate());
+
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      setMatchDate(selectedDate);
+    }
+  };
 
   const handleAddMessage = () => {
     if (!selectedProfileId) {
@@ -109,11 +96,13 @@ export function AdminScreen() {
       showYourTurn: newProfile.showYourTurn,
       liked: newProfile.liked,
       online: newProfile.online,
+      matchDate: matchDate,
     };
 
     setProfiles([profile, ...profiles]);
     setNewProfile({});
     setImageUrl('');
+    setMatchDate(getCurrentDate());
   };
 
   const removeProfile = (id: string) => {
@@ -197,6 +186,23 @@ export function AdminScreen() {
           )}
         </TouchableOpacity>
 
+        <TouchableOpacity 
+          style={styles.dateButton} 
+          onPress={() => setShowDatePicker(true)}
+        >
+          <Text style={styles.dateButtonText}>
+            Match Date: {formatMatchDate(matchDate)}
+          </Text>
+        </TouchableOpacity>
+
+        {showDatePicker && (
+          <DateTimePicker
+            value={matchDate}
+            mode="date"
+            display="default"
+            onChange={handleDateChange}
+          />
+        )}
 
         <View style={styles.checkboxRow}>
           <TouchableOpacity
@@ -447,5 +453,17 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontFamily: fonts.Proxima_Nova_Bold,
+  },
+  dateButton: {
+    backgroundColor: colors.gray_reciever,
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  dateButtonText: {
+    fontSize: 16,
+    fontFamily: fonts.Proxima_Nova_Regular,
+    color: colors.gray_darker,
+    textAlign: 'center',
   },
 });

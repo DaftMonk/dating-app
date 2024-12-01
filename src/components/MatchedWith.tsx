@@ -1,24 +1,27 @@
 import { fonts } from "@constants";
 import { blue_dark, gray_dark, gray_darker } from "@constants/color";
 import SENT from "@svgs/sent.svg";
+import { formatMatchDate } from "../utils/dateUtils";
 import React from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
   profileImage?: string;
+  name: string;
+  matchDate: Date;
   enableMessages: () => void;
 };
 
-export function MatchedWith({ profileImage, enableMessages }: Props) {
+export function MatchedWith({ profileImage, name, matchDate, enableMessages }: Props) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        You matched with <Text style={styles.highlight}>Selena</Text>
+        You matched with <Text style={styles.highlight}>{name}</Text>
       </Text>
-      <Text style={styles.subtitle}>2 days ago</Text>
+      <Text style={styles.subtitle}>{formatMatchDate(matchDate)}</Text>
       <Image source={{ uri: profileImage }} style={styles.image} />
       <Text style={styles.infoText}>
-        Know when <Text style={styles.highlight}>Selena</Text> has read your
+        Know when <Text style={styles.highlight}>{name}</Text> has read your
         message.
       </Text>
       <TouchableOpacity style={styles.button} onPress={enableMessages}>
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
     color: gray_dark,
     marginBottom: 20,
   },
-
   button: {
     backgroundColor: "#1786FF",
     paddingVertical: 0,
@@ -83,7 +85,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 6,
   },
-
   iconTextContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -91,7 +92,6 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 0,
   },
-
   buttonText: {
     color: "#fff",
     fontFamily: fonts.Proxima_Nova_Bold,

@@ -22,16 +22,20 @@ import {
 import { useApp } from "../context/AppContext";
 import CAMERA_BLUE from "@svgs/camera_blue.svg";
 import { MatchedWith } from "components/MatchedWith";
+import { formatMatchDate, getCurrentDate } from "../utils/dateUtils";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
 
 export function ChatScreen({ route, navigation }: Props) {
-  const { messages, setMessages } = useApp();
+  const { messages, setMessages, profiles } = useApp();
   const chatMessages = messages[route.params.matchId] || [];
   const [showShuffle, setShowShuffle] = useState(true);
   const [isFlatListEnabled, setIsFlatListEnabled] = useState(false);
 
-  const { isNewMatch, photo, name } = route.params;
+  const { isNewMatch, photo, name, matchId } = route.params;
+  
+  const profile = profiles.find(p => p.id === matchId);
+  const matchDate = profile?.matchDate || getCurrentDate();
 
   const enableFlatList = () => {
     setIsFlatListEnabled(true);
@@ -59,18 +63,12 @@ export function ChatScreen({ route, navigation }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
       keyboardVerticalOffset={90}
     >
-      {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.center}>
-          <Image source={{ uri: route.params.photo }} style={styles.avatar} />
+          <Image source={{ uri: photo }} style={styles.avatar} />
           <View style={styles.nameRow}>
-            <Text style={styles.name}>{route.params.name + " "}</Text>
-
-            {route.params.isNewMatch ? (
-              <CAMERA_BLUE height={14} width={14} />
-            ) : (
-              <></>
-            )}
+            <Text style={styles.name}>{name + " "}</Text>
+            {isNewMatch && <CAMERA_BLUE height={14} width={14} />}
           </View>
         </View>
 
@@ -98,7 +96,12 @@ export function ChatScreen({ route, navigation }: Props) {
 
       <View style={styles.content}>
         {isNewMatch && !isFlatListEnabled ? (
-          <MatchedWith profileImage={photo} enableMessages={enableFlatList} />
+          <MatchedWith 
+            profileImage={photo}
+            name={name}
+            matchDate={matchDate}
+            enableMessages={enableFlatList}
+          />
         ) : chatMessages.length === 0 && !isNewMatch ? (
           <View style={styles.fallbackContainer}>
             <Text style={styles.fallbackText}>No messages yet!</Text>
@@ -113,18 +116,18 @@ export function ChatScreen({ route, navigation }: Props) {
             contentContainerStyle={styles.messagesList}
             ListHeaderComponent={() => (
               <Text style={styles.matchedText}>
-                You matched with {name} 11/5/24
+                You matched with {name} {formatMatchDate(matchDate, false)}
               </Text>
             )}
             ListFooterComponent={() =>
               showShuffle && !isNewMatch ? (
-                <SuggestedMessage onSend={() => {}} />
+                <SuggestedMessage onSend={handleSend} />
               ) : null
             }
           />
         )}
 
-        <MessageInput onSend={() => {}} />
+        <MessageInput onSend={handleSend} />
       </View>
     </KeyboardAvoidingView>
   );
@@ -160,7 +163,8 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   matchedText: {
-    fontSize: 14,
+    fontSize: 12,
+    textTransform: 'uppercase',
     fontWeight: "500",
     fontFamily: fonts.Proxima_Nova_Regular,
     marginBottom: 0,
@@ -196,14 +200,14 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   content: {
-    flex: 1, // Ensures this section fills the remaining vertical space
+    flex: 1,
   },
   messagesList: {
     paddingVertical: 16,
     paddingHorizontal: 8,
   },
   fallbackContainer: {
-    flex: 1, // Occupies the entire space if there are no messages
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
