@@ -1,4 +1,5 @@
 import { colors, fonts } from "@constants";
+import { useNavigation } from "@react-navigation/native";
 import CAMERA_BLUE from "@svgs/camera_blue.svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -8,11 +9,23 @@ type Props = {
   name: string;
   marker?: boolean;
   hasCamera?: boolean;
+  matchId: number;
 };
 
-export function NewMatchCard({ photo, name, marker, hasCamera }: Props) {
+export function NewMatchCard({ photo, name, marker, hasCamera,matchId }: Props) {
+
+  const navigation = useNavigation();
+
+  
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={() => {
+      navigation.navigate("Chat", {
+        matchId,
+        name,
+        photo,
+        isNewMatch: true,
+      })
+    }}>
       {marker && <View style={styles.marker} />}
       <LinearGradient
         colors={["rgba(0,0,0,0)", "rgba(0,0,0,0.7)"]}

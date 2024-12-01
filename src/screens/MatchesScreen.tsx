@@ -32,7 +32,7 @@ type Props = NativeStackScreenProps<RootStackParamList, "Matches">;
 
 export function MatchesScreen({ navigation }: Props) {
   const { profiles, messages, likesCount, blurredProfile } = useApp();
-  
+
   const getLastMessage = (profileId: string) => {
     const chatMessages = messages[profileId] || [];
     return chatMessages[chatMessages.length - 1]?.message;
@@ -53,8 +53,8 @@ export function MatchesScreen({ navigation }: Props) {
     return (messages[profileId]?.length || 0) > 0;
   };
 
-  const existingMatches = profiles.filter(profile => hasMessages(profile.id));
-  const newMatches = profiles.filter(profile => !hasMessages(profile.id));
+  const existingMatches = profiles.filter((profile) => hasMessages(profile.id));
+  const newMatches = profiles.filter((profile) => !hasMessages(profile.id));
 
   return (
     <View style={styles.container}>
@@ -68,8 +68,8 @@ export function MatchesScreen({ navigation }: Props) {
             />
           </View>
 
-          <TouchableOpacity 
-            style={styles.shieldContainer} 
+          <TouchableOpacity
+            style={styles.shieldContainer}
             onPress={() => navigation.navigate("Admin")}
           >
             <SHIELD height={24} width={24} color={colors.gray} />
@@ -87,10 +87,14 @@ export function MatchesScreen({ navigation }: Props) {
           <View>
             <View style={styles.likesCard}>
               <View style={styles.blurCard}>
-                { blurredProfile ? <Image
-                  source={{ uri: blurredProfile }}
-                  style={styles.blurImg}
-                /> : <></> }
+                {blurredProfile ? (
+                  <Image
+                    source={{ uri: blurredProfile }}
+                    style={styles.blurImg}
+                  />
+                ) : (
+                  <></>
+                )}
                 <BlurView intensity={20} style={styles.blurView} />
               </View>
               <View style={styles.likeContainer}>
@@ -105,15 +109,22 @@ export function MatchesScreen({ navigation }: Props) {
             </View>
             <Text style={styles.likesText}>Likes</Text>
           </View>
-          {newMatches.map((match) => (
-            <NewMatchCard
-              key={match.id}
-              photo={match.photo}
-              name={match.name}
-              marker={false}
-              hasCamera={match.hasCamera}
-            />
-          ))}
+
+          {newMatches.map((match) => {
+            return (
+              <TouchableOpacity
+                key={match.id}
+                onPress={() => console.log(match)}
+              >
+                <NewMatchCard
+                  photo={match.photo}
+                  name={match.name}
+                  marker={false}
+                  hasCamera={match.hasCamera}
+                  matchId={match.id}                />
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
 
         {existingMatches.length > 0 && (
