@@ -39,24 +39,31 @@ export function MessageItem({
       </View>
       <View style={styles.content}>
         <View style={styles.header}>
-          <View style={styles.row}>
-            <Text style={styles.name}>{name}</Text>
-            {liked && (
-              <View style={styles.innerContainer}>
-                <View style={styles.liked_you}></View>
-                <Text style={styles.liked}>Likes you</Text>
-              </View>
+          <View style={styles.headerLeft}>
+            <View style={styles.row}>
+              <Text style={styles.name}>{name}</Text>
+              {liked && (
+                <View style={styles.innerContainer}>
+                  <View style={styles.liked_you}></View>
+                  <Text style={styles.liked}>Likes you</Text>
+                </View>
+              )}
+            </View>
+            {hasCamera && (
+              <CAMERA_BLUE height={20} width={20} style={styles.cameraIcon} />
+            )}
+            {hasEmoji && (
+              <GOLDEN_HEART
+                height={38}
+                width={38}
+                style={styles.emojiContainer}
+              />
             )}
           </View>
-          {hasCamera && (
-            <CAMERA_BLUE height={24} width={24} style={styles.cameraIcon} />
-          )}
-          {hasEmoji && (
-            <GOLDEN_HEART
-              height={38}
-              width={38}
-              style={styles.emojiContainer}
-            />
+          {showYourTurn && (
+            <View style={styles.yourTurn}>
+              <Text style={styles.yourTurnText}>Your Turn</Text>
+            </View>
           )}
         </View>
         {phoneNumber ? (
@@ -84,11 +91,6 @@ export function MessageItem({
           </View>
         )}
       </View>
-      {showYourTurn && (
-        <View style={styles.yourTurn}>
-          <Text style={styles.yourTurnText}>Your Turn</Text>
-        </View>
-      )}
     </TouchableOpacity>
   );
 }
@@ -106,9 +108,18 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginRight: 12,
   },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 0,
+  },
+  headerLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
   row: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
   },
   liked_you: {
@@ -133,11 +144,6 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     justifyContent: "center",
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 5,
   },
   name: {
     fontSize: 18,
