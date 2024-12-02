@@ -18,10 +18,11 @@ type Props = {
   showImage?: boolean;
   isSpace?: boolean;
   profileImage?: string;
+  isLastInGroup?: boolean;
 };
 
 const screenWidth = Dimensions.get('window').width;
-const MAX_BUBBLE_WIDTH = screenWidth * 0.7; // Reduced to accommodate heart
+const MAX_BUBBLE_WIDTH = screenWidth * 0.7;
 
 export function ChatBubble({
   message,
@@ -36,6 +37,7 @@ export function ChatBubble({
   showImage,
   isSpace,
   profileImage,
+  isLastInGroup,
 }: Props) {
   return (
     <View>
@@ -49,7 +51,7 @@ export function ChatBubble({
           style={[
             styles.container,
             isSender ? styles.senderContainer : styles.receiverContainer,
-            { marginVertical: isSpace ? 8 : 4 }
+            { marginBottom: isLastInGroup ? 7 : 4 }
           ]}
         >
           {!isSender && showImage && (
@@ -59,6 +61,9 @@ export function ChatBubble({
               }}
               style={styles.avatar}
             />
+          )}
+          {!isSender && !showImage && (
+            <View style={styles.avatarPlaceholder} />
           )}
           <View
             style={[
@@ -97,9 +102,8 @@ export function ChatBubble({
       </View>
       {showSent && (
         <View style={[styles.sentContainer, isSender && styles.sentContainerRight]}>
-        
-                  <SENT height={30} width={30} />
-                  <PLUS height={10} width={10} style={styles.plus} />
+          <SENT height={30} width={30} />
+          <PLUS height={10} width={10} style={styles.plus} />
           <Text style={styles.sentText}>Sent</Text>
         </View>
       )}
@@ -125,9 +129,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 25,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    marginRight: 8,
+  },
+  avatarPlaceholder: {
+    width: 32,
+    height: 32,
     marginRight: 8,
   },
   bubble: {
@@ -139,6 +148,7 @@ const styles = StyleSheet.create({
   senderBubble: {
     backgroundColor: colors.blue_sender,
     borderBottomRightRadius: 4,
+    marginLeft: 40,
   },
   receiverBubble: {
     backgroundColor: colors.gray_reciever,
@@ -164,7 +174,6 @@ const styles = StyleSheet.create({
     height: 24,
     justifyContent: 'center',
     alignItems: 'center',
-  
   },
   sentContainer: {
     flexDirection: "row",
@@ -177,7 +186,6 @@ const styles = StyleSheet.create({
   sentContainerRight: {
     alignSelf: 'flex-end',
   },
-
   plus: {
     position: "absolute",
     top: 5,

@@ -5,7 +5,6 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import BACK_ICON from "@svgs/back.svg";
 import MENU_BOTTOM from "@svgs/menu-bottom.svg";
 import VIDEO_ICON from "@svgs/video.svg";
-import { ChatBubble } from "components/ChatBubble";
 import { MessageInput } from "components/MessageInput";
 import { SuggestedMessage } from "components/SuggestedMessage";
 import { useState } from "react";
@@ -23,6 +22,8 @@ import { useApp } from "../context/AppContext";
 import CAMERA_BLUE from "@svgs/camera_blue.svg";
 import { MatchedWith } from "components/MatchedWith";
 import { formatMatchDate, getCurrentDate } from "../utils/dateUtils";
+import { groupMessages } from "../utils/messageUtils";
+import { MessageGroupView } from "../components/MessageGroupView";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Chat">;
 
@@ -36,6 +37,8 @@ export function ChatScreen({ route, navigation }: Props) {
   
   const profile = profiles.find(p => p.id === matchId);
   const matchDate = profile?.matchDate || getCurrentDate();
+
+  const messageGroups = groupMessages(chatMessages);
 
   const enableFlatList = () => {
     setIsFlatListEnabled(true);
@@ -108,9 +111,9 @@ export function ChatScreen({ route, navigation }: Props) {
           </View>
         ) : (
           <FlatList
-            data={chatMessages}
+            data={messageGroups}
             renderItem={({ item }) => (
-              <ChatBubble {...item} profileImage={photo} />
+              <MessageGroupView group={item} profileImage={photo} />
             )}
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.messagesList}
@@ -167,7 +170,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontWeight: "500",
     fontFamily: fonts.Proxima_Nova_Regular,
-    marginBottom: 0,
+    marginBottom: 8,
     marginTop: -6,
     textAlign: "center",
     color: gray_darker,
